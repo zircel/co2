@@ -1,0 +1,119 @@
+*,
+html,
+body {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+#selection-panel,
+#tree-panel {
+   display: block;
+   padding-bottom: 50px;
+}
+
+#selection-panel.hidden,
+#tree-panel.hidden {
+   display: none;
+}
+
+#visualization {
+   display: none;
+   height: 100%;
+   background-color: black;
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   justify-content: center;
+   align-items: center;
+}
+
+#notification {
+   display: none;
+   background-color: grey;
+   position: absolute;
+   top: 0;
+   right: 20px;
+   width: 300px;
+   height: 50px;
+}
+
+#notification.show,
+#visualization.show {
+   display: flex;
+}
+
+#co2-bar {
+   position: fixed;
+   bottom: 0;
+   text-align: center;
+   width: 100%;
+   padding: 20px;
+   background: #ccc;
+}
+
+.circle {
+   background: rgb(49, 255, 118);
+   background: linear-gradient(
+      90deg,
+      rgba(49, 255, 118, 1) 2%,
+      rgba(63, 94, 251, 1) 24%,
+      rgba(252, 70, 107, 1) 52%,
+      rgba(252, 200, 54, 1) 92%
+   );
+   border-radius: 1000px;
+   position: absolute;
+}
+
+.circle.avg {
+   background: transparent;
+   border: 3px solid white;
+}
+
+#visualization button {
+   position: absolute;
+   width: 100%;
+   bottom: 10px;
+   background-color: black;
+   color: white;
+   border: 0;
+   font-size: 20px;
+   font-weight: bold;
+}
+
+.done {
+   color: green;
+}
+
+#selection-panel {
+   padding: 20px;
+}
+
+#selection-panel a {
+   display: inline-block;
+   width: calc(50% - 20px);
+   height: 100px;
+   margin: 5px;
+   padding: 10px;
+   border: 1px solid black;
+   cursor: pointer;
+}
+
+#tree-panel header {
+   background: grey;
+   margin: 0;
+   padding: 20px;
+   position: fixed;
+   top: 0;
+   width: 100%;
+}
+
+#tree-panel header button#back {
+   background: black;
+   color: white;
+   padding: 5px 20px;
+}
+
+#tree-panel .inner {
+   margin: 100px;
+}
