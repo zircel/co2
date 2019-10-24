@@ -1,5 +1,10 @@
 'use strict'
 
+import h3 from '../nodes/h3'
+import input from '../nodes/input'
+import span from '../nodes/span'
+import button from '../nodes/button'
+
 const template = document.createElement('template')
 
 template.innerHTML = `
@@ -41,33 +46,32 @@ export default class Slider extends HTMLElement {
    }
 
    init(goto, config, page) {
-      console.log(config)
-      const h3 = document.createElement('h3')
-      h3.textContent = config.text
-
-      const button = document.createElement('button')
-      button.textContent = 'Weiter'
-      button.addEventListener('click', _ => {
+      const onConfirmation = function(e) {
          const state = {}
-         state[config.key] = input.value
-         console.log(state, page.setState)
+         state[config.key] = e.target.value
          page.setState(state)
          // TODO: fix
          // .then(_ => goto('success'))
          // .catch(_ => goto('error'))
          goto('success')
-      })
+      }
 
-      const input = document.createElement('input')
-      input.type = 'range'
-      input.max = config.max
-      input.min = config.min
-      input.value = config.value
-      input.step = config.step
+      const onSliderInput = function(e) {
+         currentVal.textContent = e.target.value + (config.unit || '')
+      }
 
-      this.shadowRoot.appendChild(h3)
-      this.shadowRoot.appendChild(input)
-      this.shadowRoot.appendChild(button)
+      const attrs = {
+         type: 'range',
+         max: config.max,
+         min: config.min,
+         step: config.step,
+         value: config.value
+      }
+      const currentVal = span(config.value + (config.unit || ''))
+      this.shadowRoot.appendChild(h3(config.text))
+      this.shadowRoot.appendChild(input(attrs, onSliderInput))
+      this.shadowRoot.appendChild(currentVal)
+      this.shadowRoot.appendChild(button('', 'Weiter', onConfirmation))
    }
 }
 
