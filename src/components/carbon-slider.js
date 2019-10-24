@@ -48,7 +48,7 @@ export default class Slider extends HTMLElement {
    init(goto, config, page) {
       const onConfirmation = function() {
          const state = {}
-         state[config.key] = inpt.value
+         state[config.key] = slider.value
          page.setState(state)
          // TODO: fix
          // .then(_ => goto('success'))

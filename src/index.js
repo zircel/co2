@@ -6,17 +6,14 @@ import FlightList from './components/carbon-flight-list'
 import Heating from './components/carbon-heating'
 import FoodDistribution from './components/carbon-food-distribution'
 
-import { getFlights, getHeatingFactor, getCo2ForFood } from './datastore'
-import { FLIGHT_CO2_CONSUMPTION } from './data/flights'
-import {
-   CAR_EMISSION_DIESEL,
-   CAR_EMISSION_ELECTRO,
-   CAR_EMISSION_FUEL,
-   CAR_LIFETIME,
-   CAR_PRODODUCTION_EMISSION_ICE,
-   CAR_PRODUCTION_EMISSION_ELECTRO
-} from './data/cars'
+import flightsHandler from './handlers/flightsHandler'
+import trainHandler from './handlers/trainHandler'
+import carHandler from './handlers/carHandler'
+import foodHandler from './handlers/foodHandler'
+import housingHandler from './handlers/housingHandler'
+
 import button from './nodes/button'
+import div from './nodes/div'
 
 const selectionPanel = document.querySelector('#selection-panel')
 const treePanel = document.querySelector('#tree-panel')
@@ -35,92 +32,6 @@ backButton.addEventListener('click', _ => {
    treePanel.classList.add('hidden')
    selectionPanel.classList.remove('hidden')
 })
-
-const flightsHandler = function(state, onUpdate) {
-   const res = getFlights().reduce((sum, flight) => {
-      return sum + flight.km * FLIGHT_CO2_CONSUMPTION
-   }, 0)
-
-   onUpdate('flights', res)
-}
-
-const trainHandler = function(state, onUpdate) {
-   // TODO:
-}
-
-const carHandler = function(state, onUpdate) {
-   onUpdate = onUpdate.bind(null, 'car')
-
-   if (state.nocar) {
-      return onUpdate(0)
-   }
-
-   if (state.distanceCar) {
-      const distanceCar = Number.parseInt(state.distanceCar)
-      const passengersCar = Number.parseInt(state.passengersCar) || 1
-      const yearsDriving = CAR_LIFETIME / distanceCar
-
-      if (state.electro) {
-         const electroConsumption = Number.parseInt(state.electroConsumption)
-
-         return onUpdate(
-            (distanceCar * electroConsumption * CAR_EMISSION_ELECTRO) /
-               (100 * passengersCar) +
-               CAR_PRODUCTION_EMISSION_ELECTRO / yearsDriving
-         )
-      }
-
-      const fuelConsumption = Number.parseInt(state.fuelConsumption)
-      const emission = state.diesel ? CAR_EMISSION_DIESEL : CAR_EMISSION_FUEL
-      onUpdate(
-         (distanceCar * emission * fuelConsumption) / (100 * passengersCar) +
-            CAR_PRODODUCTION_EMISSION_ICE / yearsDriving
-      )
-   }
-}
-
-const housingHandler = function(state, onUpdate) {
-   console.log(state)
-   // power [kWh/m^2]
-   let power = 0
-   // sizeHousing [m^2]
-   const sizeHousing = Number.parseInt(state.sizeHousing)
-   // heatingHouse --> heating type
-   const heatingFactor = getHeatingFactor(state.heatingHousing)
-   // number of people living in the same house/apartment
-   const peopleHousing = Number.parseInt(state.peopleHousing)
-
-   if (state.oldHousing) {
-      power = 200
-   } else if (state.newHousing) {
-      power = 100
-   } else if (state.minergieHousing) {
-      power = 40
-   }
-
-   // console.log({ sizeHousing, peopleHousing, heatingFactor })
-   onUpdate('housing', (sizeHousing * power * heatingFactor) / peopleHousing)
-}
-
-const foodHandler = function(state, onUpdate) {
-   // per week
-   const meatPortions = Number.parseInt(state.meatPortions)
-   // in gram
-   const meatPortionSize = Number.parseInt(state.meatPortionSize)
-   // per day
-   const veggiePortions = Number.parseInt(state.veggiePortions)
-   const carbsPortions = Number.parseInt(state.carbsPortions)
-   const dairyPortions = Number.parseInt(state.dairyPortions)
-   // not used yet
-   const noSaisonality = state.noSaisonality
-
-   const vegCo2 = getCo2ForFood('veggies', veggiePortions)
-   const meatCo2 = getCo2ForFood('meat', meatPortions, meatPortionSize)
-   const carbsCo2 = getCo2ForFood('carbs', carbsPortions)
-   const dairyCo2 = getCo2ForFood('dairy', dairyPortions)
-
-   onUpdate('food', vegCo2 + meatCo2 + carbsCo2 + dairyCo2)
-}
 
 // TODO: defaults stimmen nicht
 const DEFAULTS = new Map([
@@ -209,7 +120,6 @@ categories.forEach(cat => {
       page.addEventListener('zircel-update', e => {
          const node = e.detail.node
          const state = e.detail.state
-         console.log({ node, state })
 
          cat.keypoints.forEach(kp => {
             const onUpdate = function(key, val) {
@@ -223,7 +133,7 @@ categories.forEach(cat => {
 
             for (let t of kp.triggers) {
                if (node.id.includes(t)) {
-                  kp.handler(e.detail.state, onUpdate)
+                  kp.handler(state, onUpdate)
                   return
                }
             }
@@ -282,21 +192,19 @@ const updateVisualization = function() {
 
    const personalSum = makeSum(results)
    const avgSum = makeSum(DEFAULTS)
-   const closeBtn = document.createElement('button')
-   closeBtn.textContent = 'Schliessen'
-   closeBtn.addEventListener('click', _ => {
+   console.log(avgSum, personalSum)
+
+   const closeBtn = button('', 'Schliessen', _ => {
       visualization.classList.remove('show')
    })
 
-   console.log(avgSum, personalSum)
-   const n = document.createElement('div')
-   n.classList.add('circle')
+   const n = div('circle')
    n.style.width = `${personalSum / 8}px`
    n.style.height = `${personalSum / 8}px`
    visualization.append(n)
 
-   const m = document.createElement('div')
-   m.classList.add('circle', 'avg')
+   const m = div('circle')
+   m.classList.add('avg')
    m.style.width = `${avgSum / 8}px`
    m.style.height = `${avgSum / 8}px`
    visualization.append(m)
