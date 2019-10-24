@@ -46,9 +46,9 @@ export default class Slider extends HTMLElement {
    }
 
    init(goto, config, page) {
-      const onConfirmation = function(e) {
+      const onConfirmation = function() {
          const state = {}
-         state[config.key] = e.target.value
+         state[config.key] = inpt.value
          page.setState(state)
          // TODO: fix
          // .then(_ => goto('success'))
@@ -67,9 +67,11 @@ export default class Slider extends HTMLElement {
          step: config.step,
          value: config.value
       }
+
+      const slider = input(attrs, onSliderInput)
       const currentVal = span(config.value + (config.unit || ''))
       this.shadowRoot.appendChild(h3(config.text))
-      this.shadowRoot.appendChild(input(attrs, onSliderInput))
+      this.shadowRoot.appendChild(slider)
       this.shadowRoot.appendChild(currentVal)
       this.shadowRoot.appendChild(button('', 'Weiter', onConfirmation))
    }
