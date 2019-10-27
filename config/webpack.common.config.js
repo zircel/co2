@@ -33,7 +33,7 @@ module.exports = {
                   loader: 'file-loader',
                   options: {
                      name: '[name].[ext]',
-                     outputPath: 'assets/images'
+                     outputPath: 'public/assets'
                   }
                }
             ]
@@ -59,8 +59,8 @@ module.exports = {
       }),
       new CopyWebpackPlugin([
          {
-            from: './src/assets/images',
-            to: 'assets/images'
+            from: './src/assets',
+            to: 'assets'
          }
       ])
    ],
