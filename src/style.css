@@ -1,9 +1,34 @@
+:root {
+   --food-color: rgba(49, 255, 118, 1);
+   --housing-color: rgba(63, 94, 251, 1);
+   --commute-color: rgba(252, 70, 107, 1);
+   --flights-color: rgba(252, 200, 54, 1);
+}
+
 *,
 html,
 body {
    margin: 0;
    padding: 0;
    box-sizing: border-box;
+   font-family: 'Roboto', Helvetica, sans-serif;
+}
+
+h1 {
+   font-size: 40px;
+   line-height: 1;
+   width: 100%;
+   text-align: center;
+   margin-bottom: 40px;
+   margin-top: 50px;
+}
+
+h3 {
+   font-size: 20px;
+   font-weight: normal;
+   max-width: 600px;
+   text-align: center;
+   margin: 0 auto 40px;
 }
 
 #selection-panel,
@@ -17,6 +42,80 @@ body {
    display: none;
 }
 
+#selection-panel .cards {
+   display: flex;
+}
+
+#selection-panel .cards a {
+   width: 230px;
+   font-size: 20px;
+   font-weight: bold;
+   height: 270px;
+   padding: 50px 10px;
+   margin: 20px;
+   border-radius: 15px;
+   border: 1px solid #ddd;
+   text-align: center;
+   cursor: pointer;
+}
+
+#selection-panel .status {
+   width: 40px;
+   height: 40px;
+   border-radius: 20px;
+   border: 3px solid #e8e8e8;
+   margin: 40px auto;
+   position: relative;
+}
+
+#selection-panel .status:before,
+#selection-panel .status:after {
+   content: '';
+   background-color: #e8e8e8;
+   width: 4px;
+   height: 19px;
+   top: 7px;
+   position: absolute;
+   left: 18px;
+   transform: rotate(45deg);
+   border-radius: 3px;
+}
+
+#selection-panel .status:after {
+   left: 10px;
+   transform: rotate(-45deg);
+   height: 10px;
+   top: 15px;
+}
+
+button {
+   display: block;
+   padding: 7px 20px;
+   border-radius: 10px;
+   border: 0;
+   font-size: 16px;
+   background-color: #ffdf6e;
+   margin: 20px auto;
+   cursor: pointer;
+}
+
+/* 
+#selection-panel .cards #housing:hover {
+   border-color: var(--housing-color);
+}
+
+#selection-panel .cards #flights:hover {
+   border-color: var(--flights-color);
+}
+
+#selection-panel .cards #food:hover {
+   border-color: var(--food-color);
+}
+
+#selection-panel .cards #commute:hover {
+   border-color: var(--commute-color);
+}
+ */
 #visualization {
    display: none;
    height: 100%;
@@ -87,20 +186,13 @@ body {
 
 #selection-panel {
    padding: 20px;
-}
-
-#selection-panel a {
-   display: inline-block;
-   width: calc(50% - 20px);
-   height: 100px;
-   margin: 5px;
-   padding: 10px;
-   border: 1px solid black;
-   cursor: pointer;
+   max-width: 900px;
+   margin: 0 auto;
 }
 
 #tree-panel header {
-   background: grey;
+   background: white;
+   border-bottom: 1px solid #ddd;
    margin: 0;
    padding: 20px;
    position: fixed;
@@ -109,9 +201,7 @@ body {
 }
 
 #tree-panel header button#back {
-   background: black;
-   color: white;
-   padding: 5px 20px;
+   margin: 0;
 }
 
 #tree-panel .inner {

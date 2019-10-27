@@ -2,15 +2,25 @@ html
    head
       meta(charset="UTF-8")
       meta(name="viewport" content="width=device-width, initial-scale=1")
-      title CO2 Challenge Calculator
+      link(href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet")
+      title CO2 Score
    body
       #selection-panel
-         h1 Berechne deinen CO2 Fussabdruck
+         h1 Dein persönlicher CO2 Score
          h3 Fülle dazu die untenstehenden Kategorien aus und lerne, wie gut du im schweizerischen Durschnitt abschneidest.
-         a#food Essen
-         a#housing Wohnen
-         a#commute Pendeln
-         a#flights Fliegen
+         .cards
+            a#food Ernährung
+               button Berechnen
+               .status
+            a#housing Wohnen
+               button Berechnen
+               .status
+            a#commute Pendeln
+               button Berechnen
+               .status
+            a#flights Fliegen
+               button Berechnen
+               .status
       #tree-panel.hidden 
          header
             button#back Zurück
