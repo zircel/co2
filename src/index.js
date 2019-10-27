@@ -179,8 +179,8 @@ const showNotification = function(difference) {
 }
 
 const updateBar = function() {
-   const sum = makeSum(results)
-   carbonBar.textContent = `${sum} kg CO2 / Jahr`
+   const tonns = Number((makeSum(results) / 1000).toFixed(2))
+   carbonBar.innerHTML = `<span class="res">${tonns}</span> Tonnen CO2 pro Jahr`
 }
 
 const makeSum = function(map) {

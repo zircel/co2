@@ -1,26 +1,51 @@
 html  
    head
       meta(charset="UTF-8")
-      meta(name="viewport" content="width=device-width, initial-scale=1")
+      meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
       link(href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet")
       title CO2 Score
    body
+      
       #selection-panel
-         h1 Dein persönlicher CO2 Score
-         h3 Fülle dazu die untenstehenden Kategorien aus und lerne, wie gut du im schweizerischen Durschnitt abschneidest.
+         header
+            .logo 
+               span.z Z
+               span.slash /
+               span CO2 
+            .aside
+               button FAQ
+               button About Us
+         h1 Bist du besser als der Durchschnitt?
+         h3 Fülle dazu die untenstehenden Kategorien aus und lerne, wie gut dein CO2 Footprint im schweizerischen Durchschnitt abschneidet.
          .cards
-            a#food Ernährung
-               button Berechnen
-               .status
-            a#housing Wohnen
-               button Berechnen
-               .status
-            a#commute Pendeln
-               button Berechnen
-               .status
-            a#flights Fliegen
-               button Berechnen
-               .status
+            a#food 
+               .img-wrapper
+                  img(src="assets/food.jpg")
+               h4 Ernährung
+               .calc-fake-btn
+                  span Berechnen
+                  .status
+            a#housing 
+               .img-wrapper
+                  img(src="assets/housing.jpg")
+               h4 Wohnen
+               .calc-fake-btn
+                  span Berechnen
+                  .status
+            a#commute 
+               .img-wrapper
+                  img(src="assets/commute.jpg")
+               h4 Pendeln
+               .calc-fake-btn
+                  span Berechnen
+                  .status
+            a#flights 
+               .img-wrapper
+                  img(src="assets/flights.jpg")
+               h4 Fliegen
+               .calc-fake-btn
+                  span Berechnen
+                  .status
       #tree-panel.hidden 
          header
             button#back Zurück

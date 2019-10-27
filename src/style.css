@@ -3,6 +3,7 @@
    --housing-color: rgba(63, 94, 251, 1);
    --commute-color: rgba(252, 70, 107, 1);
    --flights-color: rgba(252, 200, 54, 1);
+   --space-bottom: 120px;
 }
 
 *,
@@ -29,6 +30,8 @@ h3 {
    max-width: 600px;
    text-align: center;
    margin: 0 auto 40px;
+   line-height: 1.4;
+   color: #4a4a4a;
 }
 
 #selection-panel,
@@ -42,8 +45,72 @@ h3 {
    display: none;
 }
 
+#selection-panel {
+   padding: 20px;
+   max-width: 900px;
+   width: 100%;
+   margin: 0 auto;
+   padding-bottom: var(--space-bottom);
+}
+
+#selection-panel header {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   font-size: 20px;
+}
+
+#selection-panel header .logo {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+#selection-panel header .z {
+   font-family: 'Helvetica Neue', Helvetica, sans-serif;
+   font-size: 32px;
+   font-weight: 500;
+   letter-spacing: 4px;
+}
+
+#selection-panel header .slash {
+   font-family: 'Helvetica Neue', Helvetica, sans-serif;
+   font-size: 44px;
+   font-weight: lighter;
+   margin-right: 12px;
+}
+
+#selection-panel header .aside button {
+   background-color: #eee;
+   border-radius: 7px;
+   padding: 5px 13px;
+   color: black;
+   border: none;
+   margin-left: 15px;
+   font-size: 16px;
+}
+
 #selection-panel .cards {
    display: flex;
+   flex-wrap: wrap;
+}
+
+#selection-panel .cards .img-wrapper {
+   width: 100%;
+   height: 100px;
+   overflow: hidden;
+}
+
+#selection-panel .cards .img-wrapper img {
+   width: 100%;
+}
+
+#selection-panel .cards #food .img-wrapper img {
+   margin-top: -80px;
+}
+
+#selection-panel .cards #flights .img-wrapper img {
+   margin-top: -15px;
 }
 
 #selection-panel .cards a {
@@ -51,20 +118,44 @@ h3 {
    font-size: 20px;
    font-weight: bold;
    height: 270px;
-   padding: 50px 10px;
-   margin: 20px;
+   margin: 20px auto;
    border-radius: 15px;
    border: 1px solid #ddd;
-   text-align: center;
+   background-color: #fafafa;
    cursor: pointer;
+   overflow: hidden;
+   position: relative;
+}
+
+#selection-panel .cards a h4 {
+   width: 100%;
+   display: block;
+   padding: 25px;
+   text-align: center;
+}
+
+#selection-panel .cards a .calc-fake-btn {
+   position: absolute;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   bottom: 0;
+   width: 100%;
+   padding: 10px;
+   border-top: 1px solid #ddd;
+   text-align: center;
+   font-weight: normal;
+   font-size: 18px;
+   text-decoration: underline;
 }
 
 #selection-panel .status {
    width: 40px;
    height: 40px;
    border-radius: 20px;
+   margin-left: 20px;
    border: 3px solid #e8e8e8;
-   margin: 40px auto;
+   display: inline-block;
    position: relative;
 }
 
@@ -81,6 +172,15 @@ h3 {
    border-radius: 3px;
 }
 
+#selection-panel .done .status:before,
+#selection-panel .done .status:after {
+   background-color: black;
+}
+
+#selection-panel .done .status {
+   border-color: black;
+}
+
 #selection-panel .status:after {
    left: 10px;
    transform: rotate(-45deg);
@@ -88,34 +188,6 @@ h3 {
    top: 15px;
 }
 
-button {
-   display: block;
-   padding: 7px 20px;
-   border-radius: 10px;
-   border: 0;
-   font-size: 16px;
-   background-color: #ffdf6e;
-   margin: 20px auto;
-   cursor: pointer;
-}
-
-/* 
-#selection-panel .cards #housing:hover {
-   border-color: var(--housing-color);
-}
-
-#selection-panel .cards #flights:hover {
-   border-color: var(--flights-color);
-}
-
-#selection-panel .cards #food:hover {
-   border-color: var(--food-color);
-}
-
-#selection-panel .cards #commute:hover {
-   border-color: var(--commute-color);
-}
- */
 #visualization {
    display: none;
    height: 100%;
@@ -148,7 +220,19 @@ button {
    text-align: center;
    width: 100%;
    padding: 20px;
-   background: #ccc;
+   background: #131212;
+   color: #e4e4e4;
+   font-size: 14px;
+   display: flex;
+   justify-content: center;
+   align-items: baseline;
+}
+
+#co2-bar .res {
+   font-weight: bold;
+   display: block;
+   margin-right: 7px;
+   font-size: 30px;
 }
 
 .circle {
@@ -180,16 +264,6 @@ button {
    font-weight: bold;
 }
 
-.done {
-   color: green;
-}
-
-#selection-panel {
-   padding: 20px;
-   max-width: 900px;
-   margin: 0 auto;
-}
-
 #tree-panel header {
    background: white;
    border-bottom: 1px solid #ddd;
@@ -205,5 +279,5 @@ button {
 }
 
 #tree-panel .inner {
-   margin: 100px;
+   margin: var(--space-bottom) 0;
 }
