@@ -1,9 +1,18 @@
 :root {
-   --food-color: rgba(49, 255, 118, 1);
-   --housing-color: rgba(63, 94, 251, 1);
-   --commute-color: rgba(252, 70, 107, 1);
-   --flights-color: rgba(252, 200, 54, 1);
-   --space-bottom: 120px;
+   --food-color: rgb(49, 255, 118);
+   --housing-color: rgb(63, 94, 251);
+   --commute-color: rgb(252, 70, 107);
+   --flights-color: rgb(252, 200, 54);
+
+   --food-share: 0;
+   --housing-share: 0;
+   --commute-share: 0;
+   --flights-share: 0;
+
+   --space-bottom: 40px;
+   --font-size: 17px;
+   --font-family: 'Roboto', Helvetica, sans-serif;
+   --font-color: #353434;
 }
 
 *,
@@ -13,6 +22,20 @@ body {
    padding: 0;
    box-sizing: border-box;
    font-family: 'Roboto', Helvetica, sans-serif;
+}
+
+.beta {
+   padding: 3px 8px;
+   transform: rotate(-40deg) translate(-19px, 10px);
+   background-color: var(--commute-color);
+   border-radius: 4px;
+   color: white;
+}
+
+button,
+a {
+   cursor: pointer;
+   color: black;
 }
 
 h1 {
@@ -34,6 +57,32 @@ h3 {
    color: #4a4a4a;
 }
 
+#faq-panel {
+   display: none;
+}
+
+#faq-panel.show {
+   display: block;
+   height: 100vh;
+   width: 100%;
+   position: fixed;
+   background-color: white;
+   z-index: 2;
+   overflow: auto;
+}
+
+#faq-panel > .inner {
+   max-width: 700px;
+   margin: 0 auto;
+   width: 100%;
+   padding: 20px;
+}
+
+#faq-panel p {
+   display: block;
+   padding: 10px 0 40px;
+}
+
 #selection-panel,
 #tree-panel {
    display: block;
@@ -47,7 +96,7 @@ h3 {
 
 #selection-panel {
    padding: 20px;
-   max-width: 900px;
+   max-width: 1200px;
    width: 100%;
    margin: 0 auto;
    padding-bottom: var(--space-bottom);
@@ -118,11 +167,10 @@ h3 {
    font-size: 20px;
    font-weight: bold;
    height: 270px;
-   margin: 20px auto;
+   margin: 15px auto;
    border-radius: 15px;
    border: 1px solid #ddd;
    background-color: #fafafa;
-   cursor: pointer;
    overflow: hidden;
    position: relative;
 }
@@ -201,17 +249,34 @@ h3 {
 
 #notification {
    display: none;
-   background-color: grey;
-   position: absolute;
-   top: 0;
+   background-color: #121111;
+   border-radius: 10px;
+   color: #e4e4e4;
+   position: fixed;
+   top: 20px;
    right: 20px;
-   width: 300px;
-   height: 50px;
+   width: 320px;
+   font-size: 15px;
+   padding: 10px 20px 10px 50px;
+   line-height: 1.2;
 }
 
-#notification.show,
+#notification:before {
+   content: '👍';
+   font-size: 30px;
+   position: absolute;
+   left: 11px;
+}
+
+#notification.worse:before {
+   content: '👎';
+}
+
+#notification.show {
+   display: block;
+}
 #visualization.show {
-   display: flex;
+   display: block;
 }
 
 #co2-bar {
@@ -219,13 +284,20 @@ h3 {
    bottom: 0;
    text-align: center;
    width: 100%;
-   padding: 20px;
+   padding: 10px 20px;
    background: #131212;
    color: #e4e4e4;
    font-size: 14px;
-   display: flex;
-   justify-content: center;
-   align-items: baseline;
+   line-height: 1.2;
+   cursor: pointer;
+}
+
+sub {
+   vertical-align: sub;
+}
+
+#co2-bar.hidden {
+   display: none;
 }
 
 #co2-bar .res {
@@ -236,48 +308,143 @@ h3 {
 }
 
 .circle {
-   background: rgb(49, 255, 118);
+   background: var(--food-color);
    background: linear-gradient(
       90deg,
-      rgba(49, 255, 118, 1) 2%,
-      rgba(63, 94, 251, 1) 24%,
-      rgba(252, 70, 107, 1) 52%,
-      rgba(252, 200, 54, 1) 92%
+      var(--food-color) 10%,
+      var(--housing-color) 40%,
+      var(--commute-color) 65%,
+      var(--flights-color) 90%
    );
-   border-radius: 1000px;
+   border-radius: 500px;
    position: absolute;
 }
 
-.circle.avg {
+#visualization {
+   overflow: auto;
+}
+
+#visualization .distribution {
+   padding: 20px;
+}
+
+#visualization .distribution > div {
+   color: white;
+   padding: 3px;
+   margin-bottom: 12px;
+   border-radius: 8px;
+}
+
+#visualization * {
+   color: #e4e4e4;
+}
+
+#visualization .distribution > span {
+   margin-bottom: 3px;
+   display: block;
+}
+
+#visualization .inner {
+   margin: 0 auto;
+   width: 100%;
+   max-width: 500px;
+}
+
+#visualization .intro {
+   text-align: center;
+   padding: 20px;
+   display: block;
+}
+
+#visualization .summary {
+   padding: 30px 20px;
+   display: block;
+}
+
+#visualization .distribution .food {
+   width: var(--food-share);
+   background-color: var(--food-color);
+}
+
+#visualization .distribution .housing {
+   width: var(--housing-share);
+   background-color: var(--housing-color);
+}
+
+#visualization .distribution .commute {
+   width: var(--commute-share);
+   background-color: var(--commute-color);
+}
+
+#visualization .distribution .flights {
+   width: var(--flights-share);
+   background-color: var(--flights-color);
+}
+
+#visualization .circle.avg {
    background: transparent;
    border: 3px solid white;
 }
-
-#visualization button {
-   position: absolute;
-   width: 100%;
-   bottom: 10px;
-   background-color: black;
-   color: white;
-   border: 0;
-   font-size: 20px;
-   font-weight: bold;
-}
-
-#tree-panel header {
-   background: white;
-   border-bottom: 1px solid #ddd;
-   margin: 0;
-   padding: 20px;
-   position: fixed;
-   top: 0;
-   width: 100%;
-}
-
-#tree-panel header button#back {
-   margin: 0;
+#visualization .circles {
+   margin: 20px auto;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: relative;
 }
 
 #tree-panel .inner {
    margin: var(--space-bottom) 0;
+}
+
+#tree-panel button#viz-button {
+   margin: 60px auto;
+   box-shadow: 0px 0px 3px 0px #c1c1c1;
+   display: none;
+}
+
+#tree-panel button#viz-button.show {
+   display: block;
+}
+
+button {
+   border: 0;
+   border-radius: 5px;
+   padding: 9px 25px;
+   margin-right: 16px;
+   margin-bottom: 16px;
+   font-size: 17px;
+   font-weight: bold;
+   cursor: pointer;
+   background-color: white;
+}
+
+button.close {
+   position: fixed;
+   bottom: 20px;
+   right: 20px;
+   margin: 0;
+   background-color: #eee;
+   padding: 0;
+   width: 50px;
+   height: 50px;
+   border-radius: 40px;
+   box-shadow: 0px 0px 5px 0px #c1c1c1;
+}
+
+button.close:before,
+button.close:after {
+   width: 36px;
+   height: 6px;
+   position: absolute;
+   top: 22px;
+   left: 7px;
+   content: '';
+   border-radius: 6px;
+   background-color: #131212;
+   transform: rotate(45deg);
+}
+
+button.close:after {
+   transform: rotate(-45deg);
 }

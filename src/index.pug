@@ -3,20 +3,39 @@ html
       meta(charset="UTF-8")
       meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
       link(href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet")
-      title CO2 Score
+      title Zircel / CO2
    body
       
+      #faq-panel
+         .inner
+         
+            h2 Auf welcher Datenbasis beruhen die Berechnungen?
+            p Die Datengrundlage stammt vornehmlich vom Bundesamt für Statistik. 
+            
+            h2 Ist die Datenbasis sowie die Berechnungs-Formel öffentlich?
+            p Ja, die Berechnungen sind öffentlich einsehbar auf <a href="https://github.com/Zircel/co2" target="blank">github.com/Zircel/co2</a>.
+            
+            h2 Sind meine Resultate genau?
+            p Nein, es handelt sich lediglich um eine Annäherung. Viele Aspekte werden dabei ignoriert. Ein schwer erfassbarer Bereich beispielsweise ist der Konsum, welcher in dieser Applikation komplett fehlt.
+            
+            h2 Wer ist verantwortlich für die Implementierung dieser Seite?
+            p Die Applikation wird betrieben von <a href="Zircel" target="blank">Zircel</a>, einem Schweizer Startup, welches eine Plattform zur Entwicklung von "Conversational Applications" anbietet. 
+            
+            button.close
+
+
       #selection-panel
          header
             .logo 
                span.z Z
                span.slash /
-               span CO2 
+               span CO<sub>2</sub> 
+               .beta Beta
+               
             .aside
-               button FAQ
-               button About Us
-         h1 Bist du besser als der Durchschnitt?
-         h3 Fülle dazu die untenstehenden Kategorien aus und lerne, wie gut dein CO2 Footprint im schweizerischen Durchschnitt abschneidet.
+               button#faq-button FAQ
+         h1 Bist du besser als der 🇨🇭 Durchschnitt?
+         h3 Fülle dazu die untenstehenden Kategorien aus und lerne, wie gut dein CO<sub>2</sub> Footprint im schweizerischen Durchschnitt abschneidet.
          .cards
             a#food 
                .img-wrapper
@@ -47,12 +66,28 @@ html
                   span Berechnen
                   .status
       #tree-panel.hidden 
-         header
-            button#back Zurück
+         button.close
          .inner
+         button#viz-button 👉 Schaue dir deine neuen Werte an 👈
       #notification     
       #co2-bar
       #visualization
+         .inner 
+            .circles
+               .circle.personal
+               .circle.avg
+                  //- span.label 12 t
+            span.summary
+            .distribution 
+               span Ernährung 
+               .food 
+               span Wohnen
+               .housing
+               span Pendeln
+               .commute 
+               span Fliegen 
+               .flights
 
+         
    script(src="https://zircel.com/dist/hello/component.js")
          

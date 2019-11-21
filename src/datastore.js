@@ -4,8 +4,11 @@ import housingMap from './data/housing'
 const flights = []
 const distributions = new Map()
 
-export function addFlight(abbr) {
-   flights.push(flightMap.get(abbr))
+export function addFlight(abbr, retour) {
+   const flight = flightMap.get(abbr)
+   // count twice if the flight is retour
+   flight.km = retour ? flight.km * 2 : flight.km
+   flights.push(flight)
 }
 
 export function getFlights() {

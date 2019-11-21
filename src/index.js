@@ -13,7 +13,6 @@ import foodHandler from './handlers/foodHandler'
 import housingHandler from './handlers/housingHandler'
 
 import button from './nodes/button'
-import div from './nodes/div'
 
 const selectionPanel = document.querySelector('#selection-panel')
 const treePanel = document.querySelector('#tree-panel')
@@ -21,22 +20,40 @@ const treePanelInner = document.querySelector('#tree-panel > .inner')
 const notification = document.querySelector('#notification')
 const carbonBar = document.querySelector('#co2-bar')
 const visualization = document.querySelector('#visualization')
-const backButton = document.querySelector('button#back')
+const treePanelCloseButton = document.querySelector('#tree-panel button.close')
+const faqButton = document.querySelector('button#faq-button')
+const faqPanel = document.querySelector('#faq-panel')
+const faqCloseButton = document.querySelector('#faq-panel button.close')
+const vizButton = document.querySelector('button#viz-button')
+const body = document.querySelector('body')
 
 carbonBar.addEventListener('click', _ => {
    visualization.classList.add('show')
 })
 
-backButton.addEventListener('click', _ => {
+vizButton.addEventListener('click', _ => showVisualization())
+
+faqButton.addEventListener('click', _ => {
+   faqPanel.classList.add('show')
+   body.style.overflow = 'hidden'
+})
+
+faqCloseButton.addEventListener('click', _ => {
+   body.style.overflow = 'auto'
+   faqPanel.classList.remove('show')
+})
+
+treePanelCloseButton.addEventListener('click', _ => {
    removeNodes(...treePanelInner.children)
    treePanel.classList.add('hidden')
    selectionPanel.classList.remove('hidden')
+   carbonBar.classList.remove('hidden')
 })
 
 // TODO: defaults stimmen nicht
 const DEFAULTS = new Map([
    ['car', 1200],
-   ['train', 200],
+   ['train', 0], // TODO:
    ['flights', 1500],
    ['housing', 2000],
    ['food', 2000]
@@ -72,14 +89,14 @@ const categories = [
       keypoints: [
          {
             name: 'Auto',
-            triggers: ['text-326f-4e7e-8da8'],
-            handler: carHandler
-         },
-         {
-            name: 'Zug',
             triggers: ['z_termination'],
-            handler: trainHandler
+            handler: carHandler
          }
+         // {
+         //    name: 'Zug',
+         //    triggers: ['z_termination'],
+         //    handler: trainHandler
+         // }
       ]
    },
    {
@@ -101,6 +118,7 @@ categories.forEach(cat => {
    anchor.addEventListener('click', _ => {
       treePanel.classList.remove('hidden')
       selectionPanel.classList.add('hidden')
+      carbonBar.classList.add('hidden')
 
       // Configuration
       const page = document.createElement('zircel-page')
@@ -121,14 +139,17 @@ categories.forEach(cat => {
          const node = e.detail.node
          const state = e.detail.state
 
+         // remove result visualization button in case it is already rendered
+         // but the user decides to change a setting
+         vizButton.classList.remove('show')
+
          cat.keypoints.forEach(kp => {
             const onUpdate = function(key, val) {
                results.set(key, val)
-               console.log('recalculation triggered', key, { results })
                const difference = DEFAULTS.get(key) - val
                showNotification(difference)
-               updateBar()
-               updateVisualization()
+               updateBar(results, DEFAULTS)
+               updateVisualization(results, DEFAULTS)
             }
 
             for (let t of kp.triggers) {
@@ -141,14 +162,7 @@ categories.forEach(cat => {
 
          if (node.type === 'z_termination') {
             anchor.classList.add('done')
-            treePanelInner.appendChild(
-               button('viz-button', 'Deine Werte', _ => {
-                  removeNodes(...treePanelInner.children)
-                  treePanel.classList.add('hidden')
-                  selectionPanel.classList.remove('hidden')
-                  visualization.classList.add('show')
-               })
-            )
+            vizButton.classList.add('show')
          }
       })
 
@@ -157,6 +171,14 @@ categories.forEach(cat => {
    })
 })
 
+const showVisualization = function() {
+   removeNodes(...treePanelInner.children)
+   treePanel.classList.add('hidden')
+   selectionPanel.classList.remove('hidden')
+   visualization.classList.add('show')
+   vizButton.classList.remove('show')
+}
+
 const showNotification = function(difference) {
    // shows the notification to the user
    notification.classList.add('show')
@@ -164,54 +186,107 @@ const showNotification = function(difference) {
    // removes the notification from the view after 2 seconds
    setTimeout(() => {
       notification.classList.remove('show')
-   }, 2000)
+   }, 2500)
 
    if (difference > 0) {
       // better than average
       notification.classList.remove('worse')
       notification.classList.add('better')
-      notification.textContent = `Du brauchst ${difference} kg weniger im Vergleich mit dem Durchschnittsschweizer.`
+      notification.innerHTML = `Du verbrauchst ${Math.abs(
+         roundedTonns(difference)
+      )} Tonnen weniger CO<sub>2</sub> als der 🇨🇭 Durchschnitt.`
    } else {
       notification.classList.remove('better')
       notification.classList.add('worse')
-      notification.textContent = `Du brauchst ${difference} kg mehr als der Durchschnittsschweizer.`
+      notification.innerHTML = `Du verbrauchst ${Math.abs(
+         roundedTonns(difference)
+      )} Tonnen mehr CO<sub>2</sub> als der 🇨🇭 Durchschnitt.`
    }
 }
 
-const updateBar = function() {
-   const tonns = Number((makeSum(results) / 1000).toFixed(2))
-   carbonBar.innerHTML = `<span class="res">${tonns}</span> Tonnen CO2 pro Jahr`
+const updateBar = function(results, defaults) {
+   const sum = makeSum(results)
+   const avgSum = makeSum(defaults)
+   const tonns = roundedTonns(makeSum(results))
+   if (sum === avgSum) {
+      carbonBar.innerHTML = `🇨🇭 Durchschnitt: ${tonns} Tonnen CO<sub>2</sub> pro Jahr`
+   } else {
+      carbonBar.innerHTML = `Dein Verbrauch: ${tonns} Tonnen CO<sub>2</sub> pro Jahr`
+   }
 }
+
+const roundedTonns = val => Number((val / 1000).toFixed(2))
 
 const makeSum = function(map) {
    return Array.from(map.values()).reduce((s, v) => s + v, 0)
 }
 
-const updateVisualization = function() {
-   removeNodes(...visualization.children)
-
+const updateVisualization = function(results, defaults) {
+   const totalWidth = Math.min(500, document.documentElement.clientWidth - 40)
    const personalSum = makeSum(results)
-   const avgSum = makeSum(DEFAULTS)
-   console.log(avgSum, personalSum)
+   const avgSum = makeSum(defaults)
+   const personalWidth =
+      personalSum > avgSum ? totalWidth : (personalSum / avgSum) * totalWidth
+   const avgWidth =
+      avgSum > personalSum ? totalWidth : (avgSum / personalSum) * totalWidth
 
-   const closeBtn = button('', 'Schliessen', _ => {
+   const closeBtn = button('close', '', _ => {
       visualization.classList.remove('show')
    })
 
-   const n = div('circle')
-   n.style.width = `${personalSum / 8}px`
-   n.style.height = `${personalSum / 8}px`
-   visualization.append(n)
+   const circles = visualization.querySelector('.circles')
+   circles.style.width = `${totalWidth}px`
+   circles.style.height = `${totalWidth}px`
 
-   const m = div('circle')
-   m.classList.add('avg')
-   m.style.width = `${avgSum / 8}px`
-   m.style.height = `${avgSum / 8}px`
-   visualization.append(m)
+   const n = visualization.querySelector('.circle.personal')
+   n.style.width = `${personalWidth}px`
+   n.style.height = `${personalWidth}px`
 
-   // Array.from(results.entries()).forEach(e => {
-   //    const [key, val] = e
-   // })
+   const m = visualization.querySelector('.circle.avg')
+   m.style.width = `${avgWidth}px`
+   m.style.height = `${avgWidth}px`
+
+   const summary = visualization.querySelector('.summary')
+
+   if (avgSum == personalSum) {
+      summary.innerHTML = `Dein jährlicher CO<sub>2</sub> Ausstoss beträgt etwa 
+      ${roundedTonns(
+         personalSum
+      )} Tonnen. Du bist damit gleich gut wie der 🇨🇭 Durchschnitt.`
+   } else if (avgSum > personalSum) {
+      const p = Math.round(((avgSum - personalSum) / personalSum) * 100)
+      summary.innerHTML = `Dein jährlicher CO<sub>2</sub> Ausstoss beträgt etwa 
+      ${roundedTonns(
+         personalSum
+      )} Tonnen. Du bist damit ${p}% besser als der 🇨🇭 Durchschnitt.`
+   } else {
+      const p = Math.round(((personalSum - avgSum) / avgSum) * 100)
+      summary.innerHTML = `Dein jährlicher CO<sub>2</sub> Ausstoss beträgt etwa 
+      ${roundedTonns(
+         personalSum
+      )} Tonnen. Du bist damit ${p}% besser als der 🇨🇭 Durchschnitt.`
+   }
+
+   const max = Array.from(results.values()).reduce(
+      (max, c) => (max > c ? max : c),
+      0
+   )
+
+   const docStyle = document.documentElement.style
+
+   docStyle.setProperty('--food-share', `${(results.get('food') / max) * 100}%`)
+   docStyle.setProperty(
+      '--housing-share',
+      `${(results.get('housing') / max) * 100}%`
+   )
+   docStyle.setProperty(
+      '--flights-share',
+      `${(results.get('flights') / max) * 100}%`
+   )
+   docStyle.setProperty(
+      '--commute-share',
+      `${((results.get('car') + results.get('train')) / max) * 100}%`
+   )
 
    visualization.appendChild(closeBtn)
 }
@@ -226,5 +301,5 @@ const removeNodes = function(...nodes) {
 }
 
 // initial render with default values
-updateBar()
-updateVisualization()
+updateBar(results, DEFAULTS)
+updateVisualization(results, DEFAULTS)

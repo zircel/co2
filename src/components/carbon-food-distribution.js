@@ -12,31 +12,7 @@ const template = document.createElement('template')
 template.innerHTML = `
     <style>  
       :host { 
-        width: 100%;
-        max-width: 330px;
-        border: 1px solid #eee;
-        padding: 20px;
-        margin: 20px auto; 
-        display: block; 
-        font-family: Helvetica Neue, Helvetica;
-      }
-
-      * { box-sizing: border-box; }
-
-      p {
-         margin: 0 0 10px 0;
-         color: #545454;
-         font-size: 17px;
-      }
-
-      button {
-         margin-right: 10px; 
-         border: 1px solid #ccc;
-         padding: 5px 10px;
-         border-radius: 5px;
-         font-size: 15px;
-         cursor: pointer;
-         display: block
+        display: none;
       }
     </style>`
 
@@ -59,6 +35,16 @@ export default class Slider extends HTMLElement {
    }
 
    init(goto, config) {
+      // TODO: taking even distribution for the time being
+      const values = [33, 33, 33]
+      const names = config.options.split(',').map(o => o.trim())
+      addDistribution(config.id, names, values)
+      window.setTimeout(_ => {
+         goto('success')
+      }, 50)
+      return
+      // TODO: User Interface not yet implemented
+
       this.shadowRoot.appendChild(h3(config.text))
 
       console.log(config)

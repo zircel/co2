@@ -8,35 +8,52 @@ import button from '../nodes/button'
 const template = document.createElement('template')
 
 template.innerHTML = `
-    <style>  
-      :host { 
-        width: 100%;
-        max-width: 330px;
-        border: 1px solid #eee;
-        padding: 20px;
-        margin: 20px auto; 
-        display: block; 
-        font-family: Helvetica Neue, Helvetica;
-      }
+<style>  
+:host { 
+  width: 100%;
+  max-width: 330px;
+  padding: 20px;
+  margin: 20px auto; 
+  display: block; 
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  box-shadow: 0px 2px 6px 2px rgba(0, 0, 0, 0.1);
+  color: var(--font-color);
+  border-radius: 20px;
+}
 
-      * { box-sizing: border-box; }
+h3 {
+   font-size: var(--font-size);
+   margin: 0;
+}
 
-      p {
-         margin: 0 0 10px 0;
-         color: #545454;
-         font-size: 17px;
-      }
+input[type="range"] {
+   width: 90%;
+   margin: 20px 0;
+   display: block;
+   margin-bottom: 20px;
+}
 
-      button {
-         margin-right: 10px; 
-         border: 1px solid #ccc;
-         padding: 5px 10px;
-         border-radius: 5px;
-         font-size: 15px;
-         cursor: pointer;
-         display: block
-      }
-    </style>`
+span {
+   display: block;
+}
+
+* { box-sizing: border-box; }
+
+button {
+   border: 0;
+   border-radius: 5px;
+   padding: 9px 25px;
+   margin-right: 16px;
+   margin-top: 16px;
+   font-weight: bold;
+   font-size: var(--font-size);
+   cursor: pointer;
+   line-height: 1.2;
+   background-color: white;
+   box-shadow: 0px 0px 3px 0px #c1c1c1;
+}
+</style>`
 
 export default class Slider extends HTMLElement {
    constructor() {
@@ -57,8 +74,10 @@ export default class Slider extends HTMLElement {
       }
 
       const onSliderInput = function(e) {
-         currentVal.textContent = e.target.value + (config.unit || '')
+         currentVal.textContent = `${e.target.value} ${config.unit || ''}`
       }
+
+      console.log(config)
 
       const attrs = {
          type: 'range',
@@ -69,7 +88,7 @@ export default class Slider extends HTMLElement {
       }
 
       const slider = input(attrs, onSliderInput)
-      const currentVal = span(config.value + (config.unit || ''))
+      const currentVal = span(`${config.value} ${config.unit || ''}`)
       this.shadowRoot.appendChild(h3(config.text))
       this.shadowRoot.appendChild(slider)
       this.shadowRoot.appendChild(currentVal)
