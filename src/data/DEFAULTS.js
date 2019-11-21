@@ -1,5 +1,5 @@
 // in kg C02 pro Jahr
-export default DEFAULTS = new Map([
+export default new Map([
    // Quelle: https://www.bfs.admin.ch/bfs/de/home/statistiken/mobilitaet-verkehr/personenverkehr/verkehrsverhalten.html
    ['car', 1800],
    ['train', 4],
