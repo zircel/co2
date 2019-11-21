@@ -67,8 +67,9 @@ h3 {
    width: 100%;
    position: fixed;
    background-color: white;
+   -webkit-overflow-scrolling: touch;
    z-index: 2;
-   overflow: auto;
+   overflow-y: scroll;
 }
 
 #faq-panel > .inner {

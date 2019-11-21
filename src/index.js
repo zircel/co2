@@ -6,8 +6,10 @@ import FlightList from './components/carbon-flight-list'
 import Heating from './components/carbon-heating'
 import FoodDistribution from './components/carbon-food-distribution'
 
+import DEFAULTS from './data/DEFAULTS'
+
 import flightsHandler from './handlers/flightsHandler'
-import trainHandler from './handlers/trainHandler'
+// import trainHandler from './handlers/trainHandler'
 import carHandler from './handlers/carHandler'
 import foodHandler from './handlers/foodHandler'
 import housingHandler from './handlers/housingHandler'
@@ -50,14 +52,6 @@ treePanelCloseButton.addEventListener('click', _ => {
    carbonBar.classList.remove('hidden')
 })
 
-// TODO: defaults stimmen nicht
-const DEFAULTS = new Map([
-   ['car', 1200],
-   ['train', 0], // TODO:
-   ['flights', 1500],
-   ['housing', 2000],
-   ['food', 2000]
-])
 const results = new Map(DEFAULTS)
 
 const categories = [
