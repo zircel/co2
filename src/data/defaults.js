@@ -1,4 +1,4 @@
-// in kg C02 pro Jahr
+// in kg CO2 pro Jahr
 export default new Map([
    // Quelle: https://www.bfs.admin.ch/bfs/de/home/statistiken/mobilitaet-verkehr/personenverkehr/verkehrsverhalten.html
    ['car', 1800],
