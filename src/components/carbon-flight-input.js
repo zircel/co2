@@ -78,12 +78,14 @@ export default class FlightInput extends HTMLElement {
       const retour = input({ type: 'checkbox', checked: true })
       const to = document.createElement('select')
 
-      Array.from(flights.values()).forEach(f => {
-         const option = document.createElement('option')
-         option.value = f.abbr
-         option.textContent = f.name
-         to.appendChild(option)
-      })
+      Array.from(flights.values())
+         .sort((x, y) => (x.name < y.name ? -1 : 1))
+         .forEach(f => {
+            const option = document.createElement('option')
+            option.value = f.abbr
+            option.textContent = f.name
+            to.appendChild(option)
+         })
 
       const onConfirm = function() {
          addFlight(to.value, retour.checked)
