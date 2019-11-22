@@ -6,15 +6,13 @@ import FlightList from './components/carbon-flight-list'
 import Heating from './components/carbon-heating'
 import FoodDistribution from './components/carbon-food-distribution'
 
-import DEFAULTS from './data/DEFAULTS'
+import DEFAULTS from './data/defaults'
 
 import flightsHandler from './handlers/flightsHandler'
 // import trainHandler from './handlers/trainHandler'
 import carHandler from './handlers/carHandler'
 import foodHandler from './handlers/foodHandler'
 import housingHandler from './handlers/housingHandler'
-
-import button from './nodes/button'
 
 const selectionPanel = document.querySelector('#selection-panel')
 const treePanel = document.querySelector('#tree-panel')
@@ -26,12 +24,17 @@ const treePanelCloseButton = document.querySelector('#tree-panel button.close')
 const faqButton = document.querySelector('button#faq-button')
 const faqPanel = document.querySelector('#faq-panel')
 const faqCloseButton = document.querySelector('#faq-panel button.close')
+const vizCloseButton = document.querySelector('#visualization button.close')
 const vizButton = document.querySelector('button#viz-button')
 const body = document.querySelector('body')
 
 carbonBar.addEventListener('click', _ => {
    visualization.classList.add('show')
 })
+
+vizCloseButton.addEventListener('click', _ =>
+   visualization.classList.remove('show')
+)
 
 vizButton.addEventListener('click', _ => showVisualization())
 
@@ -224,10 +227,6 @@ const updateVisualization = function(results, defaults) {
    const avgWidth =
       avgSum > personalSum ? totalWidth : (avgSum / personalSum) * totalWidth
 
-   const closeBtn = button('close', '', _ => {
-      visualization.classList.remove('show')
-   })
-
    const circles = visualization.querySelector('.circles')
    circles.style.width = `${totalWidth}px`
    circles.style.height = `${totalWidth}px`
@@ -258,7 +257,7 @@ const updateVisualization = function(results, defaults) {
       summary.innerHTML = `Dein jährlicher CO<sub>2</sub> Ausstoss beträgt etwa 
       ${roundedTonns(
          personalSum
-      )} Tonnen. Du bist damit ${p}% besser als der 🇨🇭 Durchschnitt.`
+      )} Tonnen. Du bist damit ${p}% schlechter als der 🇨🇭 Durchschnitt.`
    }
 
    const max = Array.from(results.values()).reduce(
@@ -281,8 +280,6 @@ const updateVisualization = function(results, defaults) {
       '--commute-share',
       `${((results.get('car') + results.get('train')) / max) * 100}%`
    )
-
-   visualization.appendChild(closeBtn)
 }
 
 const removeNodes = function(...nodes) {

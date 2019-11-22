@@ -59,22 +59,18 @@ h3 {
 
 #faq-panel {
    display: none;
-}
-
-#faq-panel.show {
-   display: block;
    height: 100vh;
    width: 100%;
    position: fixed;
    background-color: white;
    -webkit-overflow-scrolling: touch;
    z-index: 2;
-   overflow-y: scroll;
+   overflow: auto;
 }
 
 #faq-panel > .inner {
    max-width: 700px;
-   margin: 0 auto;
+   margin: 40px auto;
    width: 100%;
    padding: 20px;
 }
@@ -181,6 +177,8 @@ h3 {
    display: block;
    padding: 25px;
    text-align: center;
+   font-size: 37px;
+   color: #3e3e3e;
 }
 
 #selection-panel .cards a .calc-fake-btn {
@@ -208,6 +206,26 @@ h3 {
    position: relative;
 }
 
+#selection-panel .done .status.food {
+   border-color: var(--food-color);
+   background-color: var(--food-color);
+}
+
+#selection-panel .done .status.housing {
+   border-color: var(--housing-color);
+   background-color: var(--housing-color);
+}
+
+#selection-panel .done .status.commute {
+   border-color: var(--commute-color);
+   background-color: var(--commute-color);
+}
+
+#selection-panel .done .status.flights {
+   border-color: var(--flights-color);
+   background-color: var(--flights-color);
+}
+
 #selection-panel .status:before,
 #selection-panel .status:after {
    content: '';
@@ -226,10 +244,6 @@ h3 {
    background-color: black;
 }
 
-#selection-panel .done .status {
-   border-color: black;
-}
-
 #selection-panel .status:after {
    left: 10px;
    transform: rotate(-45deg);
@@ -238,6 +252,7 @@ h3 {
 }
 
 #visualization {
+   overflow: auto;
    display: none;
    height: 100%;
    background-color: black;
@@ -273,9 +288,8 @@ h3 {
    content: '👎';
 }
 
-#notification.show {
-   display: block;
-}
+#notification.show,
+#faq-panel.show,
 #visualization.show {
    display: block;
 }
@@ -319,10 +333,6 @@ sub {
    );
    border-radius: 500px;
    position: absolute;
-}
-
-#visualization {
-   overflow: auto;
 }
 
 #visualization .distribution {
