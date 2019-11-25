@@ -1,8 +1,9 @@
-html  
+html(lang="de")
    head
       meta(charset="UTF-8")
       meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
-     
+      
+      meta(name="description" content="Ein einfacher CO2 Calculator zur Berechnung eines CO2 Fussabdrucks. User erfahren dabei, wie gut sie im Vergleich mit dem Schweizer Durchschnitt abschneiden.")
       meta(property="og:title" content=`Zircel / CO2 Calculator`)
       meta(property="og:description" content=`Lerne, wie gut dein CO2 Footprint im schweizerischen Durchschnitt abschneidet.`)
       meta(property="og:type" content="website")
@@ -56,28 +57,28 @@ html
          .cards
             a#food 
                .img-wrapper
-                  img(src="assets/food.jpg")
+                  img(src="assets/food.jpg" alt="Ernährung")
                h4 Ernährung
                .calc-fake-btn
                   span Berechnen
                   .status.food
             a#housing 
                .img-wrapper
-                  img(src="assets/housing.jpg")
+                  img(src="assets/housing.jpg" alt="Wohnen")
                h4 Wohnen
                .calc-fake-btn
                   span Berechnen
                   .status.housing
             a#commute 
                .img-wrapper
-                  img(src="assets/commute.jpg")
+                  img(src="assets/commute.jpg" alt="Pendeln")
                h4 Pendeln
                .calc-fake-btn
                   span Berechnen
                   .status.commute
             a#flights 
                .img-wrapper
-                  img(src="assets/flights.jpg")
+                  img(src="assets/flights.jpg" alt="Fliegen")
                h4 Fliegen
                .calc-fake-btn
                   span Berechnen
