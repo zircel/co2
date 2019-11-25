@@ -231,13 +231,19 @@ const updateVisualization = function(results, defaults) {
    circles.style.width = `${totalWidth}px`
    circles.style.height = `${totalWidth}px`
 
-   const n = visualization.querySelector('.circle.personal')
-   n.style.width = `${personalWidth}px`
-   n.style.height = `${personalWidth}px`
+   const you = visualization.querySelector('.circle.you')
+   you.style.width = `${personalWidth}px`
+   you.style.height = `${personalWidth}px`
 
-   const m = visualization.querySelector('.circle.avg')
-   m.style.width = `${avgWidth}px`
-   m.style.height = `${avgWidth}px`
+   const youSpan = visualization.querySelector('.circle.you span')
+   youSpan.textContent = `YOU = ${roundedTonns(personalSum)}t`
+
+   const avg = visualization.querySelector('.circle.avg')
+   avg.style.width = `${avgWidth}px`
+   avg.style.height = `${avgWidth}px`
+
+   const avgSpan = visualization.querySelector('.circle.avg span')
+   avgSpan.textContent = `AVG = ${roundedTonns(personalSum)}t`
 
    const summary = visualization.querySelector('.summary')
 

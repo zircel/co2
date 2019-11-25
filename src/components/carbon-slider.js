@@ -77,8 +77,6 @@ export default class Slider extends HTMLElement {
          currentVal.textContent = `${e.target.value} ${config.unit || ''}`
       }
 
-      console.log(config)
-
       const attrs = {
          type: 'range',
          max: config.max,
