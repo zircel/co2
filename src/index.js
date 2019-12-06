@@ -122,7 +122,13 @@ categories.forEach(cat => {
       page.pid = '5d1f11c8e5f98d40feaca0bb'
       page.path = cat.tree
       // TODO: mit reset state mache
-      page.state = { nocar: false, distanceCar: '' }
+      page.state = {
+         nocar: false,
+         isElectro: false,
+         isDiesel: false,
+         isPetrol: false,
+         distanceCar: ''
+      }
       page.scrolling = 'document'
 
       page.register('carbon-slider', Slider)
@@ -146,7 +152,6 @@ categories.forEach(cat => {
                const difference = DEFAULTS.get(key) - val
                showNotification(difference)
                updateBar(results, DEFAULTS)
-               updateVisualization(results, DEFAULTS)
             }
 
             for (let t of kp.triggers) {
@@ -174,6 +179,7 @@ const showVisualization = function() {
    selectionPanel.classList.remove('hidden')
    visualization.classList.add('show')
    vizButton.classList.remove('show')
+   updateVisualization(results, DEFAULTS)
 }
 
 const showNotification = function(difference) {
@@ -243,7 +249,7 @@ const updateVisualization = function(results, defaults) {
    avg.style.height = `${avgWidth}px`
 
    const avgSpan = visualization.querySelector('.circle.avg span')
-   avgSpan.textContent = `AVG = ${roundedTonns(personalSum)}t`
+   avgSpan.textContent = `AVG = ${roundedTonns(avgSum)}t`
 
    const summary = visualization.querySelector('.summary')
 
@@ -271,21 +277,44 @@ const updateVisualization = function(results, defaults) {
       0
    )
 
-   const docStyle = document.documentElement.style
+   const dstyle = document.documentElement.style
 
-   docStyle.setProperty('--food-share', `${(results.get('food') / max) * 100}%`)
-   docStyle.setProperty(
-      '--housing-share',
-      `${(results.get('housing') / max) * 100}%`
-   )
-   docStyle.setProperty(
-      '--flights-share',
-      `${(results.get('flights') / max) * 100}%`
-   )
-   docStyle.setProperty(
-      '--commute-share',
-      `${((results.get('car') + results.get('train')) / max) * 100}%`
-   )
+   const foodRes = results.get('food')
+   const housingRes = results.get('housing')
+   const flightsRes = results.get('flights')
+   const commuteRes = results.get('car') + results.get('train')
+
+   dstyle.setProperty('--food-share', `${(foodRes / max) * 100}%`)
+   dstyle.setProperty('--housing-share', `${(housingRes / max) * 100}%`)
+   dstyle.setProperty('--commute-share', `${(commuteRes / max) * 100}%`)
+   dstyle.setProperty('--flights-share', `${(flightsRes / max) * 100}%`)
+
+   // gradient tick positions
+   const foodTick = (100 * foodRes) / personalSum
+   const housingTick = foodTick + (100 * housingRes) / personalSum
+   const commuteTick = housingTick + (100 * commuteRes) / personalSum
+   const flightsTick = commuteTick + (100 * flightsRes) / personalSum
+
+   const ticks = [`var(--food-color) ${-10 + foodTick}%`]
+
+   // those if statements filter out ticks which are too close to their neighbours
+   if (foodTick + 2 < housingTick) {
+      ticks.push(`var(--housing-color) ${-10 + housingTick}%`)
+   }
+
+   if (housingTick + 2 < commuteTick) {
+      ticks.push(`var(--commute-color) ${-10 + commuteTick}%`)
+   }
+
+   if (commuteTick + 2 < flightsTick) {
+      ticks.push(`var(--flights-color) ${-10 + flightsTick}%`)
+   }
+
+   you.style.background = `linear-gradient(90deg, ${ticks.join(', ')})`
+
+   // console.log(results)
+   // console.log(defaults)
+   // console.log(ticks)
 }
 
 const removeNodes = function(...nodes) {

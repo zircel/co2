@@ -1,10 +1,7 @@
 import {
    CAR_EMISSION_DIESEL,
    CAR_EMISSION_ELECTRO,
-   CAR_EMISSION_FUEL,
-   CAR_LIFETIME,
-   CAR_PRODODUCTION_EMISSION_ICE,
-   CAR_PRODUCTION_EMISSION_ELECTRO
+   CAR_EMISSION_FUEL
 } from '../data/cars'
 
 export default function(state, onUpdate) {
@@ -17,23 +14,26 @@ export default function(state, onUpdate) {
    if (state.distanceCar) {
       const distanceCar = Number.parseInt(state.distanceCar)
       const passengersCar = Number.parseInt(state.passengersCar) || 1
-      const yearsDriving = CAR_LIFETIME / distanceCar
 
-      if (state.electro) {
-         const electroConsumption = Number.parseInt(state.electroConsumption)
-
+      if (state.isElectro) {
+         console.log(
+            'elektro',
+            (distanceCar * CAR_EMISSION_ELECTRO) / (1000 * passengersCar)
+         )
          return onUpdate(
-            (distanceCar * electroConsumption * CAR_EMISSION_ELECTRO) /
-               (100 * passengersCar) +
-               CAR_PRODUCTION_EMISSION_ELECTRO / yearsDriving
+            (distanceCar * CAR_EMISSION_ELECTRO) / (1000 * passengersCar)
          )
       }
 
       const fuelConsumption = Number.parseInt(state.fuelConsumption)
-      const emission = state.diesel ? CAR_EMISSION_DIESEL : CAR_EMISSION_FUEL
+      const emission = state.isDiesel ? CAR_EMISSION_DIESEL : CAR_EMISSION_FUEL
+      console.log(
+         'benzin',
+         passengersCar,
+         (distanceCar * emission * fuelConsumption) / (100 * passengersCar)
+      )
       onUpdate(
-         (distanceCar * emission * fuelConsumption) / (100 * passengersCar) +
-            CAR_PRODODUCTION_EMISSION_ICE / yearsDriving
+         (distanceCar * emission * fuelConsumption) / (100 * passengersCar)
       )
    }
 }

@@ -56,10 +56,19 @@ html(lang="de")
          h1 Bist du besser als der 🇨🇭 Durchschnitt?
          h3 Fülle dazu die untenstehenden Kategorien aus und lerne, wie gut dein CO<sub>2</sub> Footprint im schweizerischen Durchschnitt abschneidet.
          .cards
+            a#commute 
+               .img-wrapper
+                  img(src="assets/commute.jpg" alt="Pendeln")
+               h4 Pendeln
+               span 1 min
+               .calc-fake-btn
+                  span Berechnen
+                  .status.commute
             a#food 
                .img-wrapper
                   img(src="assets/food.jpg" alt="Ernährung")
                h4 Ernährung
+               span 2 min
                .calc-fake-btn
                   span Berechnen
                   .status.food
@@ -67,20 +76,15 @@ html(lang="de")
                .img-wrapper
                   img(src="assets/housing.jpg" alt="Wohnen")
                h4 Wohnen
+               span 1 min
                .calc-fake-btn
                   span Berechnen
                   .status.housing
-            a#commute 
-               .img-wrapper
-                  img(src="assets/commute.jpg" alt="Pendeln")
-               h4 Pendeln
-               .calc-fake-btn
-                  span Berechnen
-                  .status.commute
             a#flights 
                .img-wrapper
                   img(src="assets/flights.jpg" alt="Fliegen")
                h4 Fliegen
+               span 1-3 min
                .calc-fake-btn
                   span Berechnen
                   .status.flights
